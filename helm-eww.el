@@ -225,10 +225,11 @@ Each candidate is a list of (URL TITLE)."
 See `helm-eww-bookmarks' for more details."
   ;; Bookmarks are only first loaded when `eww-bookmark-prepare' is called.
   ;; This can be too late for us, so we do it here.
-  (unless eww-bookmarks
-    (eww-read-bookmarks))
+  (unless bookmark-alist
+    (bookmark-maybe-load-default-file))
   (helm-build-sync-source "EWW bookmarks"
-    :candidates (mapcar (lambda (e) (list (plist-get e :url) (plist-get e :title))) eww-bookmarks)
+    :candidates (mapcar (lambda (e) (list (car e) (bookmark-prop-get e 'location)))
+                        (seq-filter (lambda (x) (eq (bookmark-prop-get x 'handler) 'bmkp-jump-eww)) bookmark-alist))
     :candidate-transformer 'helm-eww-highlight-bookmarks
     :candidate-number-limit 1000
     :action `(("Open URL(s)" . helm-eww-switch-buffers)
