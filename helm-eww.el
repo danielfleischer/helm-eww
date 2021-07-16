@@ -228,7 +228,7 @@ See `helm-eww-bookmarks' for more details."
   (unless bookmark-alist
     (bookmark-maybe-load-default-file))
   (helm-build-sync-source "EWW bookmarks"
-    :candidates (mapcar (lambda (e) (list (car e) (bookmark-prop-get e 'location)))
+    :candidates (mapcar (lambda (e) (list (bookmark-prop-get e 'location) (car e)))
                         (seq-filter (lambda (x) (eq (bookmark-prop-get x 'handler) 'bmkp-jump-eww)) bookmark-alist))
     :candidate-transformer 'helm-eww-highlight-bookmarks
     :candidate-number-limit 1000
